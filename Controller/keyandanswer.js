@@ -41,15 +41,15 @@ async function getTogetherAIResponse(question, context) {
 }
 
 exports.keyandanswercontroller = async (req, res) => {
-  console.log("inside keyandanswercontroller");
+  //console.log("inside keyandanswercontroller");
 
   const { question } = req.body;
-  console.log(question, "question keyandanswercontroller");
+  //console.log(question, "question keyandanswercontroller");
 
   try {
     // Fetch keyword data from the database
     const keywordData = await keyandanswers.find();
-    // console.log(keywordData, "keywordData");
+    // //console.log(keywordData, "keywordData");
 
     if (keywordData.length === 0) {
       return res.json({
@@ -69,7 +69,7 @@ exports.keyandanswercontroller = async (req, res) => {
 
     // Perform the initial fuzzy search
     let matches = fuse.search(question);
-    // console.log(matches, "initial matches");
+    // //console.log(matches, "initial matches");
 
     // If no matches found, try breaking the question into parts and search each part
     if (matches.length === 0) {
@@ -77,10 +77,10 @@ exports.keyandanswercontroller = async (req, res) => {
     const topics = question
       .toLowerCase()
       .split(/\s+and\s+|\s+or\s+|\s*,\s*|\s+about\s+|\s+your\s+/);
-    console.log(topics, "topics");
+    //console.log(topics, "topics");
 
     const cleanedTopics = topics.filter((topic) => topic.length > 3); // Filter out very short words
-    console.log(cleanedTopics, "cleaned topics");
+    //console.log(cleanedTopics, "cleaned topics");
 
     // Search for each topic separately
     const topicMatches = [];
@@ -99,7 +99,7 @@ exports.keyandanswercontroller = async (req, res) => {
     });
 
     matches = Object.values(uniqueMatches);
-    console.log(matches, "topic-based matches");
+    //console.log(matches, "topic-based matches");
     }
 
     // Still no matches? Try a more direct approach with the keywords
@@ -114,7 +114,7 @@ exports.keyandanswercontroller = async (req, res) => {
       });
 
       matches = directMatches.map((item) => ({ item, score: 0 }));
-      console.log(matches, "direct keyword matches");
+      //console.log(matches, "direct keyword matches");
     }
 
     if (matches.length === 0) {
@@ -139,7 +139,7 @@ exports.keyandanswercontroller = async (req, res) => {
       finalResponse = await getTogetherAIResponse(question, finalResponse);
 
     }
-    console.log(finalResponse, "finalResponse");
+    //console.log(finalResponse, "finalResponse");
 
     res.json({ answer: finalResponse });
   } catch (error) {
