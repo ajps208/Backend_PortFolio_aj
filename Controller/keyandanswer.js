@@ -155,6 +155,16 @@ const TOGETHER_AI_API_KEY = process.env.TOGETHER_AI_API_KEY;
 
 async function getTogetherAIResponse(question) {
   try {
+    // Check if user asked for Image
+    if (question.toLowerCase().includes("image") || question.toLowerCase().includes("photo") || question.toLowerCase().includes("picture")) {
+      return "Image";
+    }
+
+    // Check if user asked for Resume
+    if (question.toLowerCase().includes("resume") || question.toLowerCase().includes("cv")) {
+      return "Resume";
+    }
+
     const response = await axios.post(
       "https://api.together.xyz/v1/chat/completions",
       {
